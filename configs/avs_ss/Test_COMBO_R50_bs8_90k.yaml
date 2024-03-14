@@ -1,0 +1,59 @@
+_BASE_: Test-R50-AVSS-SemanticSegmentation.yaml
+OUTPUT_DIR: "checkpoints/avs_ss/COMBO_R50_bs8_80k"
+MODEL:
+  FUSE_CONFIG:  
+    FUSION_STEP: "late" # early or late
+    TYPE: "MHA-None"  
+    AUDIO_DIM : 128  
+    FUSED_BACKBONE:  ["res2"]  
+    FUSED_BACKBONE_DIM: [256]  
+    NUM_FRAMES: 10 
+    QUERIES_FUSE_TYPE: "add"   
+  PRE_SAM:
+    USE_PRE_SAM: True
+    PRE_SAM_DIM: [256, 512, 1024, 2048]
+    PRE_SAM_FEATURE_SIZE: [56, 28, 14, 7]
+  #* Mask2former Config
+  META_ARCHITECTURE: "MaskFormer"
+  SEM_SEG_HEAD:
+    NAME: "MaskFormerHead"
+    IGNORE_VALUE: 255
+    NUM_CLASSES: 71
+    LOSS_WEIGHT: 1.0
+    CONVS_DIM: 256
+    MASK_DIM: 256
+    NORM: "GN"
+    # pixel decoder
+    PIXEL_DECODER_NAME: "MSDeformAttnPixelDecoder"
+    IN_FEATURES: ["res2", "res3", "res4", "res5"] 
+    DEFORMABLE_TRANSFORMER_ENCODER_IN_FEATURES: ["res3", "res4", "res5"]
+    COMMON_STRIDE: 4
+    TRANSFORMER_ENC_LAYERS: 6
+  MASK_FORMER:
+    TRANSFORMER_DECODER_NAME: "MultiScaleMaskedTransformerDecoder"
+    TRANSFORMER_IN_FEATURE: "multi_scale_pixel_decoder"
+    DEEP_SUPERVISION: True
+    NO_OBJECT_WEIGHT: 0.1
+    CLASS_WEIGHT: 2.0
+    MASK_WEIGHT: 5.0
+    DICE_WEIGHT: 5.0
+    COSINE_WEIGHT: 10.0 
+    HIDDEN_DIM: 256
+    NUM_OBJECT_QUERIES: 100
+    NHEADS: 8
+    DROPOUT: 0.0
+    DIM_FEEDFORWARD: 2048
+    ENC_LAYERS: 0
+    PRE_NORM: False
+    ENFORCE_INPUT_PROJ: False
+    SIZE_DIVISIBILITY: 32
+    DEC_LAYERS: 10  # 9 decoder layers, add one for the loss on learnable query
+    TRAIN_NUM_POINTS: 12544
+    OVERSAMPLE_RATIO: 3.0
+    IMPORTANCE_SAMPLE_RATIO: 0.75
+    TEST:
+      SEMANTIC_ON: True
+      INSTANCE_ON: False
+      PANOPTIC_ON: False
+      OVERLAP_THRESHOLD: 0.8
+      OBJECT_MASK_THRESHOLD: 0.8

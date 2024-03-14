@@ -1,0 +1,68 @@
+MODEL:
+  BACKBONE:
+    FREEZE_AT: 0  
+    NAME: "build_pvtv2_b5_backbone"
+
+  AUDIO:
+    FREEZE_AUDIO_EXTRACTOR: True 
+    PRETRAINED_VGGISH_MODEL_PATH: "pretrained/vggish-10086976.pth"
+    PREPROCESS_AUDIO_TO_LOG_MEL: False
+    POSTPROCESS_LOG_MEL_WITH_PCA: False
+    PRETRAINED_PCA_PARAMS_PATH: "pretrained/vggish_pca_params-970ea276.pth"
+
+  WEIGHTS : "pretrained/detectron2/d2_pvt_v2_b5.pkl"
+  PIXEL_MEAN: [123.675, 116.280, 103.530]
+  PIXEL_STD: [58.395, 57.120, 57.375]
+  PVT:
+    OUT_FEATURES: ["res2", "res3", "res4", "res5"]
+    # NORM: "SyncBN"
+  
+DATASETS:
+  TRAIN: ("avsms3_sem_seg_train",)
+  TEST: ("avsms3_sem_seg_test",)
+SOLVER:
+  IMS_PER_BATCH: 8
+  BASE_LR: 0.0001
+  MAX_ITER: 20000
+  WARMUP_FACTOR: 1.0
+  WARMUP_ITERS: 0
+  WEIGHT_DECAY: 0.05
+  OPTIMIZER: "ADAMW"
+  LR_SCHEDULER_NAME: "WarmupPolyLR"
+  BACKBONE_MULTIPLIER: 0.1
+  CLIP_GRADIENTS: 
+    ENABLED: True  
+    CLIP_TYPE: "full_model"   
+    CLIP_VALUE: 0.01  
+    NORM_TYPE: 2.0    
+  AMP:
+    ENABLED: False 
+INPUT:
+  AUGMENTATION: True  
+  MIN_SIZE_TRAIN: !!python/object/apply:eval ["[int(x * 0.1 * 224) for x in range(5, 21)]"]
+  MIN_SIZE_TRAIN_SAMPLING: "choice"
+  MIN_SIZE_TEST: 224
+  MAX_SIZE_TRAIN: 896 
+  MAX_SIZE_TEST: 896 
+  CROP:
+    ENABLED: True
+    TYPE: "absolute"
+    SIZE: (224, 224)
+    SINGLE_CATEGORY_MAX_AREA: 1.0
+  COLOR_AUG_SSD: True
+  SIZE_DIVISIBILITY: 224  # used in dataset mapper, close it
+  FORMAT: "RGB"
+  DATASET_MAPPER_NAME: "avsms3_semantic"
+
+
+TEST:
+  EVAL_PERIOD: 200  
+  AUG:
+    ENABLED: False
+    MIN_SIZES: [128, 224, 384]
+    MAX_SIZE: 1536
+    FLIP: True
+DATALOADER:
+  FILTER_EMPTY_ANNOTATIONS: True
+  NUM_WORKERS: 8   
+VERSION: 2
