@@ -4,5 +4,3 @@ __pycache__
 *.pt
 *.pkl
 .vscode
-AVS_dataset/*
-checkpoints/*
