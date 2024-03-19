@@ -143,7 +143,7 @@ class Trainer(DefaultTrainer):
         Returns:
             dict: a dict of result metrics
         """
-        logger = logging.getLogger(__name__)
+        logger = logging.getLogger("COMBO")
         if isinstance(evaluators, DatasetEvaluator):
             evaluators = [evaluators]
         if evaluators is not None:
@@ -152,13 +152,6 @@ class Trainer(DefaultTrainer):
             )
 
      
-        
-
-
-
-
-
-
 
         results = OrderedDict()
         for idx, dataset_name in enumerate(cfg.DATASETS.TEST):
@@ -210,7 +203,8 @@ def setup(args):
     cfg.freeze()
     default_setup(cfg, args)
     # Setup logger for "mask_former" module
-    setup_logger(output=cfg.OUTPUT_DIR + '/vis/', distributed_rank=comm.get_rank(), name="COMBO")
+    output_dir = os.path.join(cfg.OUTPUT_DIR + '/vis/')
+    setup_logger(output=output_dir, distributed_rank=comm.get_rank(), name="COMBO")
     return cfg
 
 

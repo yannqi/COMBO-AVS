@@ -56,12 +56,15 @@ def sigmoid_ce_loss(
     Returns:
         Loss tensor
     """
+
     loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction="none")
 
     return loss.mean(1).sum() / num_masks
 
 
-sigmoid_ce_loss_jit = torch.jit.script(sigmoid_ce_loss)  # type: torch.jit.ScriptModule
+sigmoid_ce_loss_jit = torch.jit.script(sigmoid_ce_loss)  # type: torch.jit.ScriptModule  
+
+
 
 
 def calculate_uncertainty(logits):

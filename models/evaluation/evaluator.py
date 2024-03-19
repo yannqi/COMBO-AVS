@@ -134,8 +134,9 @@ def inference_on_dataset(
         The return value of `evaluator.evaluate()`
     """
     num_devices = get_world_size()
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("COMBO")
     logger.info("Start inference on {} batches".format(len(data_loader)))
+
 
     total = len(data_loader)  # inference data loader must have a fixed length
     if evaluator is None:
@@ -211,18 +212,19 @@ def inference_on_dataset(
             total_seconds_per_iter = (time.perf_counter() - start_time) / iters_after_start
             if idx >= num_warmup * 2 or compute_seconds_per_iter > 5:
                 eta = datetime.timedelta(seconds=int(total_seconds_per_iter * (total - idx - 1)))
-                log_every_n_seconds(
-                    logging.INFO,
-                    (
+                current_time = time.time()
+                n= 5
+                log_time = time.time() if 'log_time' not in locals() else log_time
+                if current_time - log_time >= n:
+                    logger.info(
                         f"Inference done {idx + 1}/{total}. "
                         f"Dataloading: {data_seconds_per_iter:.4f} s/iter. "
                         f"Inference: {compute_seconds_per_iter:.4f} s/iter. "
                         f"Eval: {eval_seconds_per_iter:.4f} s/iter. "
                         f"Total: {total_seconds_per_iter:.4f} s/iter. "
-                        f"ETA={eta}"
-                    ),
-                    n=5,
-                )
+                        f"ETA={eta}")
+                    log_time = time.time()
+                
             start_data_time = time.perf_counter()
 
     # Measure the time only for this worker (before the synchronization barrier)
@@ -281,7 +283,7 @@ def inference_on_dataset_ss(
         The return value of `evaluator.evaluate()`
     """
     num_devices = get_world_size()
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger("COMBO")
     logger.info("Start inference on {} batches".format(len(data_loader)))
 
     total = len(data_loader)  # inference data loader must have a fixed length
@@ -315,24 +317,24 @@ def inference_on_dataset_ss(
             start_compute_time = time.perf_counter()
             outputs = model(inputs)
             # * outputs visualization
-            num_video = -1
-            for num_img, output in enumerate(outputs):
-                output = output["sem_seg"].argmax(dim=0).to(evaluator._cpu_device)
-                pred = np.array(output, dtype=np.uint8)
+            # num_video = -1
+            # for num_img, output in enumerate(outputs):
+            #     output = output["sem_seg"].argmax(dim=0).to(evaluator._cpu_device)
+            #     pred = np.array(output, dtype=np.uint8)
 
-                if num_img % len(outputs) == 0:
-                    num_video += 1
-                    file_names = inputs[num_video]["file_names"]
-                    video_name = file_names[0].split("AVSBench_semantic")[1].split("/")[:-1]
-                    video_name = "/".join(video_name)
+            #     if num_img % len(outputs) == 0:
+            #         num_video += 1
+            #         file_names = inputs[num_video]["file_names"]
+            #         video_name = file_names[0].split("AVSBench_semantic")[1].split("/")[:-1]
+            #         video_name = "/".join(video_name)
 
-                pred_img_path = output_dir + "/vis/" + file_names[num_img % len(outputs)].split("AVSBench_semantic")[1]
-                dir_name = os.path.dirname(pred_img_path)
-                os.makedirs(dir_name, exist_ok=True)
-                label_rgb = np.zeros((pred.shape[0], pred.shape[1], 3), dtype=np.uint8)
-                for i, rgb in zip(range(evaluator._num_classes), COLOR_MAP_SS):
-                    label_rgb[pred == i] = rgb
-                image.fromarray(label_rgb).save(pred_img_path)
+            #     pred_img_path = output_dir + "/vis/" + file_names[num_img % len(outputs)].split("AVSBench_semantic")[1]
+            #     dir_name = os.path.dirname(pred_img_path)
+            #     os.makedirs(dir_name, exist_ok=True)
+            #     label_rgb = np.zeros((pred.shape[0], pred.shape[1], 3), dtype=np.uint8)
+            #     for i, rgb in zip(range(evaluator._num_classes), COLOR_MAP_SS):
+            #         label_rgb[pred == i] = rgb
+            #     image.fromarray(label_rgb).save(pred_img_path)
 
             if torch.cuda.is_available():
                 torch.cuda.synchronize()
@@ -349,18 +351,18 @@ def inference_on_dataset_ss(
             total_seconds_per_iter = (time.perf_counter() - start_time) / iters_after_start
             if idx >= num_warmup * 2 or compute_seconds_per_iter > 5:
                 eta = datetime.timedelta(seconds=int(total_seconds_per_iter * (total - idx - 1)))
-                log_every_n_seconds(
-                    logging.INFO,
-                    (
+                current_time = time.time()
+                n= 5
+                log_time = time.time() if 'log_time' not in locals() else log_time
+                if current_time - log_time >= n:
+                    logger.info(
                         f"Inference done {idx + 1}/{total}. "
                         f"Dataloading: {data_seconds_per_iter:.4f} s/iter. "
                         f"Inference: {compute_seconds_per_iter:.4f} s/iter. "
                         f"Eval: {eval_seconds_per_iter:.4f} s/iter. "
                         f"Total: {total_seconds_per_iter:.4f} s/iter. "
-                        f"ETA={eta}"
-                    ),
-                    n=5,
-                )
+                        f"ETA={eta}")
+                    log_time = time.time()
             start_data_time = time.perf_counter()
 
     # Measure the time only for this worker (before the synchronization barrier)

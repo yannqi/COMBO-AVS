@@ -346,6 +346,7 @@ class MaskFormer(nn.Module):
                 scale_factor_module(pre_sam_features[pre_sam_feature_key])
                 for pre_sam_feature_key, scale_factor_module in zip(pre_sam_features.keys(), self.scale_factor_module)
             ]
+
             for i, key in enumerate(features.keys()):
                 # features[key] = features[key] + pre_sam_features[key] #! wo scale
                 features[key] = features[key] + pre_sam_features_scale[i] * pre_sam_features[key]  #! wscale
