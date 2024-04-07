@@ -8,10 +8,11 @@
 
 [Qi Yang](https://yannqi.github.io/), Xing Nie, Tong Li, Pengfei Gao, Ying Guo, Cheng Zhen, Pengfei Yan and [Shiming Xiang](https://people.ucas.ac.cn/~xiangshiming)
 
-This repository provides the PyTorch implementation for the paper "Cooperation Does Matter: Exploring Multi-Order Bilateral Relations for Audio-Visual Segmentation" accepted by CVPR 2024.
+This repository provides the PyTorch implementation for the paper "Cooperation Does Matter: Exploring Multi-Order Bilateral Relations for Audio-Visual Segmentation" accepted by CVPR 2024 (Highlight).
 
 ## 🔥What's New
 
+- (2024. 4.06) Our paper(COMBO) is marked as Highlight Paper! 😮
 - (2024. 3.19) Our checkpoints are available to the public, looking from [YannQi/COMBO-AVS-checkpoints · Hugging Face](https://huggingface.co/YannQi/COMBO-AVS-checkpoints)!
 - (2024. 3.14) Our code is available to the public in $\pi$ day!
 - (2024. 3.12) Our code is ready to share for the public 🌲🌲🌲!
