@@ -42,7 +42,7 @@ This repository provides the PyTorch implementation for the paper "Cooperation D
 pip install -r requirements.txt
 pip install soundfile
 # build MSDeformAttention
-cd model/modeling/pixel_decoder/ops
+cd models/modeling/pixel_decoder/ops
 sh make.sh
 ```
 
