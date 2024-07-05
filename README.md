@@ -84,6 +84,13 @@ Please refer to the link [AVSBenchmark](https://github.com/OpenNLPLab/AVSBench) 
    |--AVSBench_object/Single-source/
 ```
 
+Preprocess the AVSS dataset for efficient training.
+
+```shell
+python3 avs_tools/preprocess_avss_audio.py
+python3 avs_tools/process_avssimg2fixsize.py
+```
+
 ### 3. Download Pre-Trained Models
 
 - The pretrained backbone is available from benchmark AVSBench pretrained backbones [YannQi/COMBO-AVS-checkpoints · Hugging Face](https://huggingface.co/YannQi/COMBO-AVS-checkpoints).
