@@ -113,8 +113,8 @@ def process_image_withPool(args, index_list, img_path, df_split, output ,vis_mas
             image = Image.open(image_pth).convert('RGB')
             image_ori = np.asarray(image)
             
-            # original_image, input_image_semantic = prepare_image(image_pth=image_pth)  # change the image path to your image
-            if args.sam_type == "semantic_sam" or "mobile_sam":
+            original_image, input_image = prepare_image(image_pth=image_pth)  # change the image path to your image
+            if args.sam_type == "mobile_sam":
                 input_image = torch.from_numpy(image_ori.copy()).permute(2, 0, 1).cuda()
                 H, W = input_image.shape[1], input_image.shape[2]
             else: 
