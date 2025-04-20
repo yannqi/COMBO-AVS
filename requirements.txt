@@ -11,6 +11,6 @@ resampy==0.3.1
 scikit_learn==1.1.1
 scipy==1.8.1
 timm==0.6.5
-torch==1.13.1+cu117
+torch==2.6.0
 torchvision==0.14.1+cu117
 tqdm==4.66.1
