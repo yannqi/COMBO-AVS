@@ -1,3 +1,5 @@
+
+
 <p align="center">
   <img width="320" height="320" src="figures/COMBO_logo.png">
 
@@ -75,7 +77,7 @@ Find out more at [Semantic-SAM](https://github.com/UX-Decoder/Semantic-SAM)
 
 ### 2. Datasets
 
-Please refer to the link [AVSBenchmark](https://github.com/OpenNLPLab/AVSBench) to download the datasets. You can put the data under `data` folder or rename your own folder. Remember to modify the path in config files. The `data` directory is as bellow:
+Please refer to the link [AVSBenchmark](https://github.com/OpenNLPLab/AVSBench) to download the datasets. You can put the data under `AVS_dataset` folder or rename your own folder. Remember to modify the path in config files. The `AVS_dataset` directory is as bellow:
 
 ```
 |--AVS_dataset
